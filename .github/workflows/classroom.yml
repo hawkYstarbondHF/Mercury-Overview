@@ -1,0 +1,34 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Test All
+      id: test-all
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test All
+        setup-command: sudo apt update ; sudo apt install -y wget ca-certificates
+          ; wget https://paul.bone.id.au/paul.asc ; sudo cp paul.asc /etc/apt/trusted.gpg.d/paulbone.asc
+          ; rm paul.asc ; sudo cp mercury.list /etc/apt/sources.list.d/ ; sudo apt
+          update ; sudo apt install -y gcc-multilib mercury-recommended ; mmc --make
+          --no-warn-obsolete --inhibit-warnings test
+        command: "./test"
+        timeout: 10
+        max-score: 50
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST-ALL_RESULTS: "${{steps.test-all.outputs.result}}"
+      with:
+        runners: test-all
