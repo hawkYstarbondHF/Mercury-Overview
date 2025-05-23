@@ -1,0 +1,2 @@
+deb http://dl.mercurylang.org/deb/ focal main
+deb-src http://dl.mercurylang.org/deb/ focal main
