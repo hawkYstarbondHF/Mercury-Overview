@@ -1,5 +1,9 @@
 Mercury/
 Mercury.modules
+paul.asc
+mercury_overview
+main
+test
 *.mh
 *.err
 *.init
